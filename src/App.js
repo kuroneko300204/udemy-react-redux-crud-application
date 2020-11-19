@@ -1,32 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
-const App = () => {
-  const profiles = [
-    { name:"Taro", age: 10 },
-    { name: "Hanako", age: 5 },
-    { name: "NoName", age: 3 }
-  ]
+const App = () => (<Counter></Counter>)
 
-  return (
-    <div>
-      {
-        profiles.map((profile, index) => {
-          return <User name={profile.name} age={profile.age} key={index} />
-        })
-      }
-    </div>
-  )
-}
+class Counter extends Component {
+  // 初期化処理
+  constructor(props) {
+    super(props)
+    this.state = { count: 0 }
+  }
 
-const User = (props) => {
-  return <div>Hi, I am {props.name}, and {props.age} years old !</div>
-}
+  handlePlusButton = () => {
+    // [NG]下記の様に直接状態を変更するのはNG! 再レンダーしてくれないから。
+    // this.state = { count: this.state.count + 1 }
+    // [OK]setStateが実行されることで、再レンダーできる。
+    // 状態を変更するときはsetStateを使用すること！プログラマーが意識せずに済む。
+    this.setState({ count: this.state.count + 1 })
+  }
 
-// Userコンポーネントに対するprop-types(型チェック)
-User.propTypes = {
-  name: PropTypes.string,
-  age: PropTypes.number.isRequired
+  handleMinusButton = () => {
+    this.setState({ count: this.state.count - 1 })
+  }
+
+  render() {
+    console.log("render")
+    return (
+      <React.Fragment>
+        <div>count: { this.state.count }</div>
+        <button onClick={this.handlePlusButton}>+1</button>
+        <button onClick={this.handleMinusButton}>-1</button>
+      </React.Fragment>
+    )
+  }
 }
 
 export default App;
